@@ -33,9 +33,6 @@ RUN unzip terraform_1.1.7_linux_$(dpkg --print-architecture).zip
 RUN mv terraform /usr/local/bin/
 RUN echo 'complete -C /usr/bin/terraform terraform' >> /root/.bashrc
 
-# Ansible
-RUN apt-get install -y ansible
-
 # Gcloud init at login
 RUN echo 'gcloud init --no-launch-browser' >> /root/.bashrc
 RUN echo 'gcloud auth application-default login --no-launch-browser' >> /root/.bashrc
