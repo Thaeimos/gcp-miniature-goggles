@@ -52,6 +52,39 @@ List the ready features here:
 ## Installation
 
 First, create a project in GCP so we can start creating the infrastructure in it.
+After that's done, we need to create the service account and the bucket where we are gonna store the Terraform state for the infrastructure:
+
+```bash
+# Set project
+PROJECTID="<YOUR-PROJECT-UNIQUE-ID>"
+gcloud config set project $PROJECTID
+
+# Set region and zone - Use 'gcloud compute zones list' to check options
+LOCATION_REGION="europe-west1"
+LOCATION_ZONE="europe-west1-b"
+gcloud config set compute/region $LOCATION_REGION
+gcloud config set compute/zone $LOCATION_ZONE
+
+# Grant permission to the build API
+gcloud services enable appengine.googleapis.com bigquery.googleapis.com bigquerystorage.googleapis.com cloudapis.googleapis.com cloudbuild.googleapis.com clouddebugger.googleapis.com cloudresourcemanager.googleapis.com cloudtrace.googleapis.com containerregistry.googleapis.com datastore.googleapis.com logging.googleapis.com monitoring.googleapis.com pubsub.googleapis.com servicemanagement.googleapis.com serviceusage.googleapis.com sql-component.googleapis.com storage-api.googleapis.com storage-component.googleapis.com storage.googleapis.com
+
+# Create service account and grant the necessary permissions
+ACCOUNT_NAME="cloud-build-${PROJECTID}"
+gcloud iam service-accounts create ${ACCOUNT_NAME} --display-name "${ACCOUNT_NAME}" --description "Service account used for ${PROJECTID} in GitHub and deploying in" 
+
+# We need to assign the roles one by one, hence the loop
+LISTROLES=( --role="roles/storage.admin" --role="roles/viewer" --role="roles/iam.serviceAccountUser" --role="roles/cloudbuild.builds.editor" --role="roles/appengine.appCreator" --role="roles/appengine.appAdmin" --role="roles/pubsub.editor" --role="roles/cloudfunctions.developer" )
+for ROLE in "${LISTROLES[@]}"; do gcloud projects add-iam-policy-binding ${PROJECTID} --member="serviceAccount:${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com" $ROLE; done
+
+# Create credentials for that service account
+gcloud iam service-accounts keys create secrets/kcredentials.json --iam-account ${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com
+
+# Create the bucket for the Terraform state
+gsutil mb -c standard -l europe-west1 gs://<UNIQUE-BUCKET-NAME>
+
+# Give permissions for the Pub/Sub service account
+gcloud projects add-iam-policy-binding ${PROJECTID} --member=serviceAccount:service-<PROJECT-NUMBER-ID>@gcp-sa-pubsub.iam.gserviceaccount.com --role=roles/iam.serviceAccountTokenCreator
+```
 
 
 
