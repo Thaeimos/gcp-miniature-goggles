@@ -52,7 +52,7 @@ List the ready features here:
 ## Installation
 
 First, create a project in GCP so we can start creating the infrastructure in it.
-After that's done, we need to create the service account and the bucket where we are gonna store the Terraform state for the infrastructure:
+After that's done, we need to create the service account and the bucket where we are gonna store the Terraform state for the infrastructure. In order to achieve that, here is a snipet in bash that does so:
 
 ```bash
 # Set project
@@ -105,8 +105,13 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
+- Restrict API creation on the start and put it in Terraform
 - Terraform IaC
+    - Improve way to auto configure bucket for state
+    - Usage for terraform.tfvars?
+    - PubSub permissions in README?
 - Makefiles
+- Show data for web services in a Grafana
 
 
 ## Acknowledgements
@@ -115,6 +120,8 @@ Give credit here.
 - This project was inspired on the [README cheatsheet](https://github.com/ritaly/README-cheatsheet).
 - Help on UUID in bash is from [here](https://linuxhint.com/generate-random-string-bash/)
 - Instructions on setting backend for Terraform can be checked on this [link](https://gmusumeci.medium.com/how-to-configure-the-gcp-backend-for-terraform-7ea24f59760a)
+- How to create functions in [Terraform](https://ruanmartinelli.com/posts/terraform-cloud-functions-nodejs-api)
+- Cloud scheduler information was taken from [here](https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-schedulers-with-terraform-1433fbf1abbe)
 
 
 ## Contact
