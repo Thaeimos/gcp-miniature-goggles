@@ -51,6 +51,9 @@ List the ready features here:
 
 ## Installation
 
+First, create a project in GCP so we can start creating the infrastructure in it.
+
+
 
 
 ## Usage
@@ -68,6 +71,7 @@ Include areas you believe need improvement / could be improved. Also add TODOs f
 
 Room for improvement:
 - Terraform IaC
+- Makefiles
 
 
 ## Acknowledgements
