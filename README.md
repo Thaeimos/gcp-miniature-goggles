@@ -56,7 +56,8 @@ After that's done, we need to create the service account and the bucket where we
 
 ```bash
 # Set project
-PROJECTID="<YOUR-PROJECT-UNIQUE-ID>"
+# PROJECTID="<YOUR-PROJECT-UNIQUE-ID>"
+PROJECTID="muscia-test"
 gcloud config set project $PROJECTID
 
 # Set region and zone - Use 'gcloud compute zones list' to check options
@@ -77,10 +78,11 @@ LISTROLES=( --role="roles/storage.admin" --role="roles/viewer" --role="roles/iam
 for ROLE in "${LISTROLES[@]}"; do gcloud projects add-iam-policy-binding ${PROJECTID} --member="serviceAccount:${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com" $ROLE; done
 
 # Create credentials for that service account
-gcloud iam service-accounts keys create secrets/kcredentials.json --iam-account ${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com
+gcloud iam service-accounts keys create secrets/service-account-credentials.json --iam-account ${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com
 
-# Create the bucket for the Terraform state
-gsutil mb -c standard -l europe-west1 gs://<UNIQUE-BUCKET-NAME>
+# Create the bucket for the Terraform state with a unique name
+RANDOM_VALUE=$(cat /proc/sys/kernel/random/uuid | sed 's/[-]//g' | head -c 8)
+gsutil mb -c standard -l europe-west1 gs://bucket-tf-${PROJECTID}-${RANDOM_VALUE}
 
 # Give permissions for the Pub/Sub service account
 gcloud projects add-iam-policy-binding ${PROJECTID} --member=serviceAccount:service-<PROJECT-NUMBER-ID>@gcp-sa-pubsub.iam.gserviceaccount.com --role=roles/iam.serviceAccountTokenCreator
@@ -111,6 +113,8 @@ Room for improvement:
 Give credit here.
 - This project was helped by [Python](https://www.python.org/).
 - This project was inspired on the [README cheatsheet](https://github.com/ritaly/README-cheatsheet).
+- Help on UUID in bash is from [here](https://linuxhint.com/generate-random-string-bash/)
+- Instructions on setting backend for Terraform can be checked on this [link](https://gmusumeci.medium.com/how-to-configure-the-gcp-backend-for-terraform-7ea24f59760a)
 
 
 ## Contact
