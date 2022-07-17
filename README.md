@@ -52,6 +52,7 @@ List the ready features here:
 ## Installation
 
 First, create a project in GCP so we can start creating the infrastructure in it.
+Later, we will need to authenticate to Gcloud using their CLI. We could use the [Docker image](utilities/docker-image-bins/) to that end.
 After that's done, we need to create the service account and the bucket where we are gonna store the Terraform state for the infrastructure. In order to achieve that, here is a snipet in bash that does so:
 
 ```bash
