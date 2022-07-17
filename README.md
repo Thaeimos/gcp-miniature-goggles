@@ -35,7 +35,10 @@ The idea is to create a scalable web monitor application that feeds information 
 
 List the ready features here:
 
-- 
+- Infrastructure as code
+- Monorepo
+- Docker utility with all the commands and tools needed
+- Documentation
 
 
 ## Screenshots
@@ -106,6 +109,7 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
+- Docker image double request
 - Restrict API creation on the start and put it in Terraform
 - Terraform IaC
     - Improve way to auto configure bucket for state
