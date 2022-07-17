@@ -34,7 +34,7 @@ RUN mv terraform /usr/local/bin/
 RUN echo 'complete -C /usr/bin/terraform terraform' >> /root/.bashrc
 
 # Gcloud init at login
-RUN echo 'gcloud init --no-launch-browser' >> /root/.bashrc
+RUN echo 'gcloud init --console-only --skip-diagnostics' >> /root/.bashrc
 RUN echo 'gcloud auth application-default login --no-launch-browser' >> /root/.bashrc
 
 ENTRYPOINT ["/bin/bash"]
