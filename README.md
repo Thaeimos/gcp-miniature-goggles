@@ -79,7 +79,7 @@ ACCOUNT_NAME="cloud-build-${PROJECTID}"
 gcloud iam service-accounts create ${ACCOUNT_NAME} --display-name "${ACCOUNT_NAME}" --description "Service account used for ${PROJECTID} in GitHub and deploying in" 
 
 # We need to assign the roles one by one, hence the loop
-LISTROLES=( storage.admin viewer iam.serviceAccountUser cloudbuild.builds.editor appengine.appCreator appengine.appAdmin pubsub.editor cloudfunctions.developer serviceusage.serviceUsageAdmin )
+LISTROLES=( storage.admin viewer iam.serviceAccountUser cloudbuild.builds.editor appengine.appCreator appengine.appAdmin pubsub.editor cloudfunctions.admin serviceusage.serviceUsageAdmin )
 for ROLE in "${LISTROLES[@]}"; do gcloud projects add-iam-policy-binding ${PROJECTID} --member="serviceAccount:${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com" --role="roles/${ROLE}"; done
 
 # Create credentials for that service account
@@ -110,6 +110,7 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
+- Create cloud scheduler and test all works
 - Docker image double request - Apparently needed for the CLI and then for Terraform
     - Need to structure the part where we use 
     ```bash
@@ -131,7 +132,7 @@ Give credit here.
 - This project was inspired on the [README cheatsheet](https://github.com/ritaly/README-cheatsheet).
 - Help on UUID in bash is from [here](https://linuxhint.com/generate-random-string-bash/)
 - Instructions on setting backend for Terraform can be checked on this [link](https://gmusumeci.medium.com/how-to-configure-the-gcp-backend-for-terraform-7ea24f59760a)
-- How to create functions in [Terraform](https://ruanmartinelli.com/posts/terraform-cloud-functions-nodejs-api)
+- How to create functions in Terraform are from [here with modules](https://ruanmartinelli.com/posts/terraform-cloud-functions-nodejs-api) and [here](https://faun.pub/howto-deploy-serverless-function-on-google-cloud-using-terraform-cbbb263571c1)
 - Cloud scheduler information was taken from [here](https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-schedulers-with-terraform-1433fbf1abbe)
 
 
@@ -153,7 +154,8 @@ gcloud projects get-iam-policy muscia-test --flatten="bindings[].members" --form
 # List roles for the ORG
 gcloud iam roles list --organization ORG_ID
 
-# 
+# Add role 
+gcloud projects add-iam-policy-binding muscia-test --member="serviceAccount:cloud-build-muscia-test@muscia-test.iam.gserviceaccount.com" --role="roles/cloudfunctions.admin"
 ```
 
 
