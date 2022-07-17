@@ -15,6 +15,7 @@ This project is a website status poller that uses GCP's Pub/Sub to move info abo
 * [Project Status](#project-status)
 * [Room for Improvement](#room-for-improvement)
 * [Acknowledgements](#acknowledgements)
+* [Extras](#extras)
 * [Contact](#contact)
 
 
@@ -71,15 +72,15 @@ gcloud config set compute/region $LOCATION_REGION
 gcloud config set compute/zone $LOCATION_ZONE
 
 # Grant permission to the build API
-gcloud services enable appengine.googleapis.com bigquery.googleapis.com bigquerystorage.googleapis.com cloudapis.googleapis.com cloudbuild.googleapis.com clouddebugger.googleapis.com cloudresourcemanager.googleapis.com cloudtrace.googleapis.com containerregistry.googleapis.com datastore.googleapis.com logging.googleapis.com monitoring.googleapis.com pubsub.googleapis.com servicemanagement.googleapis.com serviceusage.googleapis.com sql-component.googleapis.com storage-api.googleapis.com storage-component.googleapis.com storage.googleapis.com
+gcloud services enable iam.googleapis.com appengine.googleapis.com bigquery.googleapis.com bigquerystorage.googleapis.com cloudapis.googleapis.com clouddebugger.googleapis.com cloudresourcemanager.googleapis.com cloudtrace.googleapis.com containerregistry.googleapis.com datastore.googleapis.com logging.googleapis.com monitoring.googleapis.com pubsub.googleapis.com servicemanagement.googleapis.com serviceusage.googleapis.com sql-component.googleapis.com storage-api.googleapis.com storage-component.googleapis.com storage.googleapis.com
 
 # Create service account and grant the necessary permissions
 ACCOUNT_NAME="cloud-build-${PROJECTID}"
 gcloud iam service-accounts create ${ACCOUNT_NAME} --display-name "${ACCOUNT_NAME}" --description "Service account used for ${PROJECTID} in GitHub and deploying in" 
 
 # We need to assign the roles one by one, hence the loop
-LISTROLES=( --role="roles/storage.admin" --role="roles/viewer" --role="roles/iam.serviceAccountUser" --role="roles/cloudbuild.builds.editor" --role="roles/appengine.appCreator" --role="roles/appengine.appAdmin" --role="roles/pubsub.editor" --role="roles/cloudfunctions.developer" )
-for ROLE in "${LISTROLES[@]}"; do gcloud projects add-iam-policy-binding ${PROJECTID} --member="serviceAccount:${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com" $ROLE; done
+LISTROLES=( storage.admin viewer iam.serviceAccountUser cloudbuild.builds.editor appengine.appCreator appengine.appAdmin pubsub.editor cloudfunctions.developer serviceusage.serviceUsageAdmin )
+for ROLE in "${LISTROLES[@]}"; do gcloud projects add-iam-policy-binding ${PROJECTID} --member="serviceAccount:${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com" --role="roles/${ROLE}"; done
 
 # Create credentials for that service account
 gcloud iam service-accounts keys create secrets/service-account-credentials.json --iam-account ${ACCOUNT_NAME}@${PROJECTID}.iam.gserviceaccount.com
@@ -109,7 +110,12 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
-- Docker image double request
+- Docker image double request - Apparently needed for the CLI and then for Terraform
+    - Need to structure the part where we use 
+    ```bash
+    gcloud auth activate-service-account --key-file=../secrets/service-account-credentials.json
+    ```
+    Possible to use "if file exists" in the dockerfile? Document it if we do it that way
 - Restrict API creation on the start and put it in Terraform
 - Terraform IaC
     - Improve way to auto configure bucket for state
@@ -127,6 +133,28 @@ Give credit here.
 - Instructions on setting backend for Terraform can be checked on this [link](https://gmusumeci.medium.com/how-to-configure-the-gcp-backend-for-terraform-7ea24f59760a)
 - How to create functions in [Terraform](https://ruanmartinelli.com/posts/terraform-cloud-functions-nodejs-api)
 - Cloud scheduler information was taken from [here](https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-schedulers-with-terraform-1433fbf1abbe)
+
+
+## Extras
+### GCP roles 
+```bash
+# Login as service account and use it's permissions on the gcloud CLI
+gcloud auth activate-service-account --key-file=../secrets/service-account-credentials.json
+
+# List service accounts
+gcloud iam service-accounts list
+
+# Gets roles for a service account
+gcloud projects get-iam-policy <YOUR GCLOUD PROJECT> --flatten="bindings[].members" \
+--format='table(bindings.role)' --filter="bindings.members:<YOUR SERVICE ACCOUNT>"
+# Example
+gcloud projects get-iam-policy muscia-test --flatten="bindings[].members" --format='table(bindings.role)' --filter="bindings.members:cloud-build-muscia-test"
+
+# List roles for the ORG
+gcloud iam roles list --organization ORG_ID
+
+# 
+```
 
 
 ## Contact
