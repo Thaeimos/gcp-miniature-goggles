@@ -110,6 +110,9 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
+- Use correctly the service account created for the project
+    - Stop delegating on default
+    - Update README instructions
 - Create cloud scheduler and test all works
 - Docker image double request - Apparently needed for the CLI and then for Terraform
     - Need to structure the part where we use 
