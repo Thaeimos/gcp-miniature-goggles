@@ -112,6 +112,8 @@ Include areas you believe need improvement / could be improved. Also add TODOs f
 
 Room for improvement:
 - Create cloud scheduler and test all works
+    - Be sure only scheduler can trigger it
+    - Fix role permission to delegated SA about creating additional SA
 - Restrict API creation on the start and put it in Terraform
 - Terraform IaC
     - Improve way to auto configure bucket for state
@@ -130,6 +132,7 @@ Give credit here.
 - Instructions on setting backend for Terraform can be checked on this [link](https://gmusumeci.medium.com/how-to-configure-the-gcp-backend-for-terraform-7ea24f59760a)
 - How to create functions in Terraform are from [here with modules](https://ruanmartinelli.com/posts/terraform-cloud-functions-nodejs-api) and [here](https://faun.pub/howto-deploy-serverless-function-on-google-cloud-using-terraform-cbbb263571c1)
 - Cloud scheduler information was taken from [here](https://medium.com/geekculture/setup-gcp-cloud-functions-triggering-by-cloud-schedulers-with-terraform-1433fbf1abbe)
+- Set up Google [Service Account in Terraform](https://diarmuid.ie/blog/setting-up-a-recurring-google-cloud-function-with-terraform)
 
 
 ## Extras
