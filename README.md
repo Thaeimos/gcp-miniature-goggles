@@ -39,6 +39,7 @@ List the ready features here:
 - Infrastructure as code
 - Monorepo
 - Docker utility with all the commands and tools needed
+    - Use user's defined service account if present. Otherwise resort to default service account.
 - Documentation
 
 
@@ -110,16 +111,7 @@ Project is: _Getting started_.
 Include areas you believe need improvement / could be improved. Also add TODOs for future development.
 
 Room for improvement:
-- Use correctly the service account created for the project
-    - Stop delegating on default
-    - Update README instructions
 - Create cloud scheduler and test all works
-- Docker image double request - Apparently needed for the CLI and then for Terraform
-    - Need to structure the part where we use 
-    ```bash
-    gcloud auth activate-service-account --key-file=./secrets/service-account-credentials.json
-    ```
-    Possible to use "if file exists" in the dockerfile? Document it if we do it that way
 - Restrict API creation on the start and put it in Terraform
 - Terraform IaC
     - Improve way to auto configure bucket for state
