@@ -114,7 +114,7 @@ Room for improvement:
 - Docker image double request - Apparently needed for the CLI and then for Terraform
     - Need to structure the part where we use 
     ```bash
-    gcloud auth activate-service-account --key-file=../secrets/service-account-credentials.json
+    gcloud auth activate-service-account --key-file=./secrets/service-account-credentials.json
     ```
     Possible to use "if file exists" in the dockerfile? Document it if we do it that way
 - Restrict API creation on the start and put it in Terraform
