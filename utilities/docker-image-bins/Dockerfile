@@ -35,6 +35,17 @@ RUN echo 'complete -C /usr/bin/terraform terraform' >> /root/.bashrc
 
 # Gcloud init at login
 RUN echo 'gcloud init --console-only --skip-diagnostics' >> /root/.bashrc
-RUN echo 'gcloud auth application-default login --no-launch-browser' >> /root/.bashrc
+
+# Use default Gcloud service account if no secret present. Otherwise, use secret for defined service account
+RUN echo 'FILE="/home/gcp-prod-cons/secrets/service-account-credentials.json"\n\
+if [ -f "$FILE" ]; then\n\
+    echo "$FILE exists."\n\
+    gcloud auth activate-service-account --key-file=$FILE\n\
+    export GOOGLE_APPLICATION_CREDENTIALS="$FILE"\n\
+else \n\
+    echo "$FILE does not exist."\n\
+    gcloud auth application-default login --no-launch-browser\n\
+fi\n\
+' >> /root/.bashrc
 
 ENTRYPOINT ["/bin/bash"]
