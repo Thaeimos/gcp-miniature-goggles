@@ -122,6 +122,7 @@ Room for improvement:
     - Improve way to auto configure bucket for state
     - Usage for terraform.tfvars?
     - PubSub permissions in README?
+    - Terraform testing
 - Makefiles
 - Show data for web services in a Grafana
 
